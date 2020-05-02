@@ -26,6 +26,12 @@ func (r *LoopReader) Read(data []byte) (int, error) {
 	return len(data), nil
 }
 
+// Restart resets the LoopReader to its initial state.
+// After calling Restart, n bytes can be read from the LoopReader again.
+func (r *LoopReader) Restart() {
+	r.dataIndex = 0
+}
+
 // NewLoopReader creates a LoopReader.
 func NewLoopReader(data []byte, n uint) (*LoopReader, error) {
 	if len(data) == 0 && n > 0 {

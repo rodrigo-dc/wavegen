@@ -106,3 +106,26 @@ func TestLoopReaderErrors(t *testing.T) {
 		t.Errorf("expected EOF, got %v", err)
 	}
 }
+
+func TestLoopReaderRestart(t *testing.T) {
+	r, err := wavereader.NewLoopReader([]byte{0, 1, 2, 3}, 4)
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	r.Restart()
+
+	data := make([]byte, 2)
+	_, err = r.Read(data)
+	if bytes.Compare(data, []byte{0, 1}) != 0 {
+		t.Error("expected:", []byte{0, 1}, "actual:", data)
+	}
+
+	r.Restart()
+
+	data = make([]byte, 4)
+	_, err = r.Read(data)
+	if bytes.Compare(data, []byte{0, 1, 2, 3}) != 0 {
+		t.Error("expected:", []byte{0, 1, 2, 3}, "actual:", data)
+	}
+}
