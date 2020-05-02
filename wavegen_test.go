@@ -35,6 +35,24 @@ func TestSine(t *testing.T) {
 	}
 }
 
+func TestSine8Bits(t *testing.T) {
+	expected := []byte{128, 255, 128, 0}
+	samples, err := wavegen.Sine8Bits(1, 4)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(samples) != 4 {
+		t.Error("wrong number of samples")
+	}
+
+	for i := range samples {
+		if samples[i] != expected[i] {
+			t.Errorf("wrong sample at index %d", i)
+		}
+	}
+}
+
 func TestSquare(t *testing.T) {
 	samples, err := wavegen.Square(2093, 44100)
 	if err != nil {
@@ -53,6 +71,13 @@ func TestSquare(t *testing.T) {
 
 func TestSineNyquist(t *testing.T) {
 	_, err := wavegen.Sine(22051, 44100)
+	if err == nil {
+		t.Error("expected an error")
+	}
+}
+
+func TestSine8BitsNyquist(t *testing.T) {
+	_, err := wavegen.Sine8Bits(4, 7)
 	if err == nil {
 		t.Error("expected an error")
 	}

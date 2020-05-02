@@ -24,3 +24,14 @@ func Sine(frequency float64, sampleRate uint) ([]float64, error) {
 
 	return samples, nil
 }
+
+// Sine8Bits returns the samples of an 8-bit depth sinusoid.
+// The phase is 0.
+func Sine8Bits(frequency float64, sampleRate uint) ([]uint8, error) {
+	floatSamples, err := Sine(frequency, sampleRate)
+	if err != nil {
+		return nil, err
+	}
+
+	return to8Bits(floatSamples), nil
+}
