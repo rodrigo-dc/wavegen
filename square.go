@@ -20,3 +20,14 @@ func Square(frequency float64, sampleRate uint) ([]float64, error) {
 
 	return samples, nil
 }
+
+// Square8Bits returns the samples of a square wave with values ranging from
+// 0 to 255. The duty cycle is 50%.
+func Square8Bits(frequency float64, sampleRate uint) ([]uint8, error) {
+	floatSamples, err := Square(frequency, sampleRate)
+	if err != nil {
+		return nil, err
+	}
+
+	return to8Bits(floatSamples), nil
+}
